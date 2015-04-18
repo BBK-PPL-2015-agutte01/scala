@@ -7,11 +7,10 @@ class Playfair {
 
   // def methodToTest: String = "hello"
 
-  def startEncode = {
-    val keyword = getKeyword
-
-    val textToEncode = readFile
+  def startEncode(keyword: String, textToEncode: String) = {
     println(s"The keyword is: $keyword, the text to encode is: $textToEncode")
+    val c = new Coder(keyword)
+    println(c.encode(textToEncode))
   }
 
   def getKeyword: String = {
@@ -28,8 +27,7 @@ class Playfair {
       try {
         text = Source.fromFile(file).mkString
       } catch {
-        case e: IOException =>
-          System.err.println("Error in reading file.")
+        case e: IOException => System.err.println("Error in reading file.")
       }
     } while (text == "")
 
@@ -39,19 +37,26 @@ class Playfair {
 
 object Playfair extends App {
 
+  val p = new Playfair
+
   do {
-    println("encode, decode, or quit?")
+    println("Please enter: (E)ncode, (D)ecode, or (Q)uit.")
   } while(!readCommand(StdIn.readLine))
 
   def readCommand(command: String): Boolean = {
-    command match {
-      case "encode" =>
-        val p = new Playfair
-        p.startEncode
-        true
+    command.toUpperCase match {
+      case "E" =>
+        val keyword = p.getKeyword
+        val textToEncode = p.readFile
+        p.startEncode(keyword, textToEncode)
+        false
       //case "decode" => startDecode; true
-      //case "quit" => quit; true
-      case _ => println("Sorry, your input was not understood."); false
+      case "Q" =>
+        println("Thank you for using Playfair Cipher 2.0. Quitting now.")
+        true
+      case _ =>
+        println("Sorry, your input was not understood.")
+        false
     }
   }
 
