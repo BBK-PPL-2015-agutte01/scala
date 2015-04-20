@@ -1,10 +1,10 @@
 package playfair
 
 class Coder(var keyword: String) {
-  keyword = alphabetAndUpperCase(keyword)
+  keyword = format(keyword)
+  val ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ" // no J
 
   def encode(plainText: String): String = {
-    // generate keyword grid
     // val pairs = processText(plainText)
     // encipher(pairs)
     "Oh hey pretend this is the encoded result."
@@ -13,17 +13,38 @@ class Coder(var keyword: String) {
   def decode(secretText: String): String = ???
 
   def generateKeyTable: Unit = {
-
-
-//    var keyTable = Array() // 5x5 matrix
-    uniqueChars(keyword)
+    val uc = uniqueChars(keyword + ALPHABET)
+    val keyTable = unflatten(uc)
   }
 
-  def alphabetAndUpperCase(input: String): String = {
-    input.replaceAll("[^a-zA-Z]", "").toUpperCase
+  def format(input: String): String = {
+    input.toUpperCase.replaceAll("[^a-zA-Z]", "").replaceAll("J", "I")
   }
 
-  def uniqueChars(word: String): List[Char] =
-    word.toList.foldLeft(List[Char]())((a, b) => if (a.contains(b)) a else a :+ b)
+  def uniqueChars(word: String): Array[Char] =
+    word.toArray.foldLeft(Array[Char]())((a, b) => if (a.contains(b)) a else a :+ b)
+
+  def unflatten(arr: Array[Char]): Array[Array[Char]] = {
+    Array(arr.slice(0, 5),
+          arr.slice(5, 10),
+          arr.slice(10, 15),
+          arr.slice(15, 20),
+          arr.slice(20, 25))
+  }
+
+//  def processText(text: String): String = {
+//    def processHelper(acc: Array[Char], text: Array[Char]) = {
+//
+//      if (text.length == 0) acc
+//      else if (text.length == 1) text.head +: ('z' +: acc)
+//      else {
+//        if (text.head == 'x' && text.tail.head == 'x') processHelper()
+//      }
+//      (first == 'x' && second == 'x')
+//    }
+//
+//    processHelper(, text.toArray).toString
+//  }
+
 }
 
