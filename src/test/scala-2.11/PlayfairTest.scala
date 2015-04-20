@@ -7,11 +7,11 @@ class PlayfairTest extends FlatSpec with Matchers {
   val p = new Playfair
 
   "A readCommand method " should "return false if an unknown String is passed as an arg." in {
-    Playfair.readCommand("skdjfhaio") should be(false)
+    p.readCommand("skdjfhaio") should be(false)
   }
 
   it should "return true if \"quit\" is passed as an arg" in {
-    Playfair.readCommand("quit") should be(true)
+    p.readCommand("quit") should be(true)
   }
 
 }
