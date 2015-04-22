@@ -26,11 +26,12 @@ class Coder(var keyword: String) {
   def generateKeyTable = {
     val uc = uniqueChars(keyword + Coder.ALPHABET)
 
-    Array(uc.slice(0, 5),
-          uc.slice(5, 10),
-          uc.slice(10, 15),
-          uc.slice(15, 20),
-          uc.slice(20, 25))
+    val listOf5 = List.range(0, 5)
+    val times5 = listOf5 ::: listOf5 ::: listOf5 ::: listOf5 ::: listOf5
+    val many5s = listOf5.flatMap(n => List(n, n, n, n, n))
+    val tuples = times5.zip(many5s)
+
+    uc.zip(tuples).toMap
   }
 
   /** Formats a String ready to encode or use in the key table
@@ -78,20 +79,9 @@ class Coder(var keyword: String) {
     processHelper(Array[(Char, Char)](), text.toLowerCase).reverse
   }
 
-  def addSpaces(interval: Int, text: String): String = ???
-//    def spacesHelper(acc: Array[Char], text: Array[Char]) = {
-//      if (text.length < 2) text +: acc
-//      else
-//    }
-//
-//    var a = text.toCharArray
-//    var result = Array[Char]()
-//    for (i <- a.indices; e <- a) {
-//      if ((i % interval) - interval + 1 == 0) result = result ++ a.slice(0, i) ++ (' ' +: a.slice(i, a.length))
-//      println(new String(a))
-//    }
-//    new String(a)
-//  }
+  def swapLetters(original: Array[(Char, Char)]): Array[(Char, Char)] = {
+    ???
+  }
 
   def encipher(pairs: Array[(Char, Char)]):String = {
     ???
@@ -100,6 +90,6 @@ class Coder(var keyword: String) {
 }
 
 object Coder {
-  val ALPHABET = "ABCDEFGHIKLMNOPQRSTUVWXYZ" // no J
+  val ALPHABET = "abcdefghiklmnopqrstuvwxyz" // no J
   def apply(keyword: String) = new Coder(keyword)
 }

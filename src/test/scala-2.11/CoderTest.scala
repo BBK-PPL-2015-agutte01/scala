@@ -16,12 +16,9 @@ class CoderTest extends FlatSpec with Matchers {
     c.keyword should be("adsigiidflgasdhgd")
   }
 
-  "An generateKeyTable method " should "return a 5x5 2D array when given an array of 25 elements." in {
-    new Coder("abcdefghijklmnopqrstuvwxyz").generateKeyTable should be (Array(Array('a', 'b', 'c', 'd', 'e'),
-                                                                              Array('f', 'g', 'h', 'i', 'k'),
-                                                                              Array('l', 'm', 'n', 'o', 'p'),
-                                                                              Array('q', 'r', 's', 't', 'u'),
-                                                                              Array('v', 'w', 'x', 'y', 'z')))
+  "An generateKeyTable method " should "return a Map with Chars as keys as (column, row) tuples as values," +
+    " returning (0, 1) for 'a'." in {
+    new Coder("").generateKeyTable('a') should be (0, 0)
   }
 
   "A processText method " should "insert a q in the tuple if there are two x's in a pair." in {
@@ -35,9 +32,5 @@ class CoderTest extends FlatSpec with Matchers {
   it should "allow for two letters in a row, in separate tuples." in {
     coder.processText("laab") should be (Array(('l', 'a'),('a', 'b')))
   }
-
-//  "An addSpaces method " should "separate chars according to the number specified." in {
-//    coder.addSpaces(3, "hellomynameisalice") should be ("hel lom yna mei sal ice")
-//  }
 
 }
