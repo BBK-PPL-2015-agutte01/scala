@@ -6,11 +6,12 @@ class Coder(var keyword: String) {
 
   /** Upon instantiation of the class */
   keyword = format(keyword)
-  val keytable = generateKeyTable
+  val charKeysTable = generateKeyTable
+  val coordinateKeysTable = charKeysTable.map(_.swap)
 
   def encode(plainText: String): String = {
-    val pairs = processText(plainText)
-    encipher(pairs)
+    println(encipher(processText(plainText)))
+    "helo"
   }
 
   def decode(secretText: String): String = ???
@@ -26,10 +27,10 @@ class Coder(var keyword: String) {
   def generateKeyTable = {
     val uc = uniqueChars(keyword + Coder.ALPHABET)
 
-    val listOf5 = List.range(0, 5)
-    val times5 = listOf5 ::: listOf5 ::: listOf5 ::: listOf5 ::: listOf5
-    val many5s = listOf5.flatMap(n => List(n, n, n, n, n))
-    val tuples = times5.zip(many5s)
+    val listOf5 = List.range(0, 5) // creates List(0, 1, 2, 3, 4)
+    val times5 = listOf5 ::: listOf5 ::: listOf5 ::: listOf5 ::: listOf5 // new List - concats list 5 times
+    val many5s = listOf5.flatMap(n => List(n, n, n, n, n)) // new List - replicates each number 5 times
+    val tuples = times5.zip(many5s) // zips the previous 2 new Lists together
 
     uc.zip(tuples).toMap
   }
@@ -84,7 +85,27 @@ class Coder(var keyword: String) {
   }
 
   def encipher(pairs: Array[(Char, Char)]):String = {
-    ???
+    val newPairs = pairs.map {
+      // same column
+      case (a, b) if charKeysTable(a)._1 == charKeysTable(b)._1 =>
+        (getChar(charKeysTable(a)._1, charKeysTable(a)._2 + 1),
+         getChar(charKeysTable(b)._1, charKeysTable(b)._2 + 1))
+      // same row
+      case (a, b) if charKeysTable(a)._2 == charKeysTable(b)._2 =>
+        (getChar(charKeysTable(a)._1 + 1, charKeysTable(a)._2),
+         getChar(charKeysTable(b)._1 + 1, charKeysTable(b)._2))
+      case (a, b) =>
+        (coordinateKeysTable(charKeysTable(b)._1, charKeysTable(a)._2),
+         coordinateKeysTable(charKeysTable(a)._1, charKeysTable(b)._2))
+    }
+
+    newPairs.foldLeft(""){ (acc, pair) => acc + pair._1.toString + pair._2.toString}
+  }
+
+  def getChar(c: Int, r: Int): Char = {
+    if (c > 4) coordinateKeysTable(0, r)
+    else if (r > 4) coordinateKeysTable(c, 0)
+    else coordinateKeysTable(c, r)
   }
 
 }

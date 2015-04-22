@@ -33,4 +33,20 @@ class CoderTest extends FlatSpec with Matchers {
     coder.processText("laab") should be (Array(('l', 'a'),('a', 'b')))
   }
 
+  "A getChar method " should "return letters from column 0 if 5 is the first tuple element." in {
+    coder.getChar(5, 0) should be ('a')
+  }
+
+  it should "return letters from row 0 if 5 is the second tuple element." in {
+    coder.getChar(0, 5) should be ('a')
+  }
+
+  it should "return the correct letter if both tuple elements are < 5." in {
+    coder.getChar(0, 0) should be ('a')
+  }
+
+  "An encipher method " should "return coded letters as a String." in {
+    coder.encipher(Array(('a', 'e'), ('a', 'k'), ('a', 'v'))) should be ("baeffa")
+  }
+
 }
