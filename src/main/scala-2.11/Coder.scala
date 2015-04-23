@@ -10,8 +10,8 @@ class Coder(var keyword: String) {
   val coordinateKeysTable = charKeysTable.map(_.swap)
 
   def encode(plainText: String): String = {
-    println(encipher(processText(plainText)))
-    "helo"
+    val unformatted = encipher(processText(format(plainText)))
+    unformatted.toString
   }
 
   def decode(secretText: String): String = ???
@@ -27,12 +27,7 @@ class Coder(var keyword: String) {
   def generateKeyTable = {
     val uc = uniqueChars(keyword + Coder.ALPHABET)
 
-    val listOf5 = List.range(0, 5) // creates List(0, 1, 2, 3, 4)
-    val times5 = listOf5 ::: listOf5 ::: listOf5 ::: listOf5 ::: listOf5 // new List - concats list 5 times
-    val many5s = listOf5.flatMap(n => List(n, n, n, n, n)) // new List - replicates each number 5 times
-    val tuples = times5.zip(many5s) // zips the previous 2 new Lists together
-
-    uc.zip(tuples).toMap
+    uc.zip(Coder.numberArray).toMap
   }
 
   /** Formats a String ready to encode or use in the key table
@@ -50,7 +45,7 @@ class Coder(var keyword: String) {
     * @return array of unique characters
     */
   def uniqueChars(word: String): Array[Char] =
-    word.toArray.foldLeft(Array[Char]())((a, b) => if (a.contains(b)) a else a :+ b)
+    word.foldLeft(Array[Char]())((a, b) => if (a.contains(b)) a else a :+ b)
 
   /** Creates tuples according to the Playfair rules.
     *
@@ -80,10 +75,6 @@ class Coder(var keyword: String) {
     processHelper(Array[(Char, Char)](), text.toLowerCase).reverse
   }
 
-  def swapLetters(original: Array[(Char, Char)]): Array[(Char, Char)] = {
-    ???
-  }
-
   def encipher(pairs: Array[(Char, Char)]):String = {
     val newPairs = pairs.map {
       // same column
@@ -99,7 +90,7 @@ class Coder(var keyword: String) {
          coordinateKeysTable(charKeysTable(a)._1, charKeysTable(b)._2))
     }
 
-    newPairs.foldLeft(""){ (acc, pair) => acc + pair._1.toString + pair._2.toString}
+    newPairs.foldRight(""){ (pair, acc) => pair._1.toString + pair._2.toString + acc}
   }
 
   def getChar(c: Int, r: Int): Char = {
@@ -112,5 +103,14 @@ class Coder(var keyword: String) {
 
 object Coder {
   val ALPHABET = "abcdefghiklmnopqrstuvwxyz" // no J
+  val numberArray = generateNumberArray
+
   def apply(keyword: String) = new Coder(keyword)
+
+  def generateNumberArray(): List[(Int, Int)] = {
+    val listOf5 = List.range(0, 5) // creates List(0, 1, 2, 3, 4)
+    val times5 = listOf5 ::: listOf5 ::: listOf5 ::: listOf5 ::: listOf5 // new List - concats list 5 times
+    val many5s = listOf5.flatMap(n => List(n, n, n, n, n)) // new List - replicates each number 5 times
+    times5.zip(many5s) // zips the previous 2 new Lists together
+  }
 }
