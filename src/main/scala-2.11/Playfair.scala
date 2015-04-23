@@ -6,9 +6,17 @@ import scala.io.{Source, StdIn}
 class Playfair() {
 
   def startEncode(keyword: String, textToEncode: String) = {
-    println(s"The keyword is: $keyword, the text to encode is: $textToEncode")
+    println(s"\nThe keyword is: $keyword, the text to encode is: $textToEncode")
     val c = new Coder(keyword)
-    println(c.encode(textToEncode))
+    println("\nENCODED TEXT:")
+    println(c.encode(textToEncode) + "\n")
+  }
+
+  def startDecode(keyword:String, textToDecode: String) = {
+    println(s"\nThe keyword is: $keyword, the text to encode is: $textToDecode")
+    val c = new Coder(keyword)
+    println("\nDECODED TEXT:")
+    println(c.decode(textToDecode) + "\n")
   }
 
   def readCommand(command: String): Boolean = {
@@ -18,7 +26,11 @@ class Playfair() {
         val textToEncode = readFile
         startEncode(keyword, textToEncode)
         false
-      //case "decode" => startDecode; true
+      case "D" =>
+        val keyword = getKeyword
+        val textToDecode = readFile
+        startDecode(keyword, textToDecode)
+        false
       case "Q" =>
         println("Thank you for using Playfair Cipher 2.0. Quitting now.")
         true
