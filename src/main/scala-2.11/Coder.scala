@@ -1,7 +1,10 @@
-package playfair
-
 import scala.annotation.tailrec
 
+/** Processes input text based on a keyword supplied by the user.
+  * The keyword is made into a keytable, allowing letter pair mappins to be used.
+  *
+  * @author Alice Gutteridge (agutte01)
+  */
 class Coder(var keyword: String) {
 
   /** Upon instantiation of the class */
@@ -33,9 +36,14 @@ class Coder(var keyword: String) {
         prepare(secretText).toCharArray.grouped(2).map(a => (a(0), a(1))).toArray, -1))
   }
 
+  /** Separates text into blocks and lines
+   *
+   * @param input alphabet text to format
+   * @return formatted String
+   */
   def format(input: String): String = {
     input.zipWithIndex.foldLeft("")((acc, charAndIndex) =>
-      if ((charAndIndex._2 + 1) % Coder.CHARS_PER_LINE == 0) {
+      if ((charAndIndex._2 + 1) % Coder.CHARS_PER_LINE == 0 && (charAndIndex._2 != input.length - 1)) {
         acc + charAndIndex._1.toString + "\n"
       }
       else if (charAndIndex._2 % Coder.CHARS_PER_BLOCK == 4) {
@@ -134,14 +142,24 @@ class Coder(var keyword: String) {
 }
 
 object Coder {
+
   val ALPHABET = "abcdefghiklmnopqrstuvwxyz" // no J
   val numberArray = generateNumberArray()
   val KEYTABLE_SIZE = 4
   val CHARS_PER_BLOCK = 5
   val CHARS_PER_LINE = 50
 
+  /** Creates a new instance of Coder.
+    *
+    * @param keyword String supplied by the user
+    * @return new Coder instance
+    */
   def apply(keyword: String) = new Coder(keyword)
 
+  /** Used as the key or value for Maps in instances of Coder
+   *
+   * @return List of tuples(Int, Int) for keytable coordinates
+   */
   def generateNumberArray(): List[(Int, Int)] = {
     val listOf5 = List.range(0, 5) // creates List(0, 1, 2, 3, 4)
     val times5 = listOf5 ::: listOf5 ::: listOf5 ::: listOf5 ::: listOf5 // new List - concats list 5 times

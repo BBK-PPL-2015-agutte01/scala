@@ -1,7 +1,5 @@
 import org.scalatest.{Matchers, FlatSpec}
 
-import playfair.{Coder, Playfair}
-
 class CoderTest extends FlatSpec with Matchers {
 
   val coder = new Coder("")

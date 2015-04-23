@@ -1,7 +1,5 @@
 import org.scalatest.{Matchers, FlatSpec}
 
-import playfair.Playfair
-
 class PlayfairTest extends FlatSpec with Matchers {
 
   val p = new Playfair
